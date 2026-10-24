@@ -1,0 +1,205 @@
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-warning">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Student Showcase
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/accounts/dashboard/">
+                Dashboard
+            </a>
+
+            <a href="/accounts/add-project/">
+                Add Project
+            </a>
+
+            <a href="/accounts/logout/" class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="dashboard-container">
+
+        <section class="welcome-section">
+
+            <p class="welcome-small">
+                PROFILE
+            </p>
+
+            <h1>
+                Edit Your Profile
+            </h1>
+
+            <p class="welcome-text">
+                Update your personal information and showcase your skills.
+            </p>
+
+        </section>
+
+
+        <section class="profile-card">
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.full_name.id_for_label }}">
+                        Full Name
+                    </label>
+
+                    {{ form.full_name }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.matric_number.id_for_label }}">
+                        Matric Number
+                    </label>
+
+                    {{ form.matric_number }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.department.id_for_label }}">
+                        Department
+                    </label>
+
+                    {{ form.department }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.level.id_for_label }}">
+                        Level
+                    </label>
+
+                    {{ form.level }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.profile_picture.id_for_label }}">
+                        Profile Picture
+                    </label>
+
+                    {{ form.profile_picture }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.bio.id_for_label }}">
+                        About Me
+                    </label>
+
+                    {{ form.bio }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.skills.id_for_label }}">
+                        Skills
+                    </label>
+
+                    {{ form.skills }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.github_link.id_for_label }}">
+                        GitHub Profile
+                    </label>
+
+                    {{ form.github_link }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.linkedin_link.id_for_label }}">
+                        LinkedIn Profile
+                    </label>
+
+                    {{ form.linkedin_link }}
+
+                </div>
+
+
+                <div class="profile-actions">
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Save Changes
+                    </button>
+
+                    <a
+                        href="/accounts/dashboard/"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

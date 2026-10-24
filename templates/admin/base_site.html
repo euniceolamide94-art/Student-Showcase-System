@@ -1,0 +1,35 @@
+
+{% extends "admin/base.html" %}
+
+{% block title %}Student Showcase Administration{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">
+        Student Showcase Administration
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+    
+.login .errornote,
+#content-main .errornote,
+.errornote {
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 3px solid #94a3b8 !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    box-shadow: none !important;
+    font-weight: normal !important;
+}
+
+    </style>
+{% endblock %}
+

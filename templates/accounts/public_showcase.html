@@ -1,0 +1,259 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Projects | Student Showcase</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="gallery-page">
+
+    <nav class="navbar gallery-navbar">
+        <a href="{% url 'public_showcase' %}" class="gallery-brand">
+            <span class="gallery-brand-icon">S</span>
+            <span>Student Showcase</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'public_showcase' %}" class="gallery-active-link">
+                Explore Projects
+            </a>
+            <a href="{% url 'login' %}">Student Login</a>
+            <a href="{% url 'register' %}" class="gallery-join-link">
+                Join the Community
+            </a>
+        </div>
+    </nav>
+
+    <main class="gallery-container">
+
+        <!-- Simple introduction -->
+        <section class="gallery-hero">
+            <p class="gallery-eyebrow">STUDENT WORK. REAL IDEAS.</p>
+
+            <h1>Discover work worth <span>exploring.</span></h1>
+
+            <p class="gallery-intro">
+                Explore projects built by students, discover new skills,
+                and meet the people turning ideas into reality.
+            </p>
+        </section>
+
+        <!-- Search and filters -->
+        <section class="gallery-explorer" id="explore-projects">
+
+            <div class="gallery-section-heading">
+                <div>
+                    <h2>Explore projects</h2>
+                    <p>Find inspiration. Discover talent.</p>
+                </div>
+            </div>
+
+            <form method="GET"
+                  action="{% url 'public_showcase' %}"
+                  class="gallery-filter-form">
+
+                <div class="gallery-search-field">
+                    <label for="gallery-search">Search</label>
+                    <input
+                        type="text"
+                        id="gallery-search"
+                        name="q"
+                        placeholder="Project, technology, skill, or student..."
+                        value="{{ search_query }}"
+                    >
+                </div>
+
+                <div class="gallery-select-field">
+                    <label for="gallery-department">Department</label>
+                    <select id="gallery-department" name="department">
+                        <option value="">All Departments</option>
+                        <option value="Computer Science"
+                            {% if selected_department == "Computer Science" %}selected{% endif %}>
+                            Computer Science
+                        </option>
+                        <option value="Software Engineering"
+                            {% if selected_department == "Software Engineering" %}selected{% endif %}>
+                            Software Engineering
+                        </option>
+                        <option value="Networking"
+                            {% if selected_department == "Networking" %}selected{% endif %}>
+                            Networking
+                        </option>
+                    </select>
+                </div>
+
+                <div class="gallery-select-field">
+                    <label for="gallery-level">Level</label>
+                    <select id="gallery-level" name="level">
+                        <option value="">All Levels</option>
+                        <option value="ND1"
+                            {% if selected_level == "ND1" %}selected{% endif %}>ND1</option>
+                        <option value="ND2"
+                            {% if selected_level == "ND2" %}selected{% endif %}>ND2</option>
+                        <option value="HND1"
+                            {% if selected_level == "HND1" %}selected{% endif %}>HND1</option>
+                        <option value="HND2"
+                            {% if selected_level == "HND2" %}selected{% endif %}>HND2</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="gallery-search-button">
+                    Search Projects
+                </button>
+
+                {% if search_query or selected_department or selected_level %}
+                    <a href="{% url 'public_showcase' %}"
+                       class="gallery-clear-link">
+                        Clear filters
+                    </a>
+                {% endif %}
+            </form>
+
+            <div class="gallery-results-bar">
+                <p class="gallery-results">
+                    {% if search_query or selected_department or selected_level %}
+                        Showing <strong>{{ projects|length }}</strong>
+                        matching project{{ projects|length|pluralize }}.
+                    {% else %}
+                        Explore projects from all students.
+                    {% endif %}
+                </p>
+                <span class="gallery-results-note">LATEST STUDENT WORK</span>
+            </div>
+
+            <!-- Project gallery -->
+            {% if projects %}
+                <div class="gallery-project-grid">
+
+                    {% for project in projects %}
+                        <article class="gallery-project-card">
+
+                            <a href="{% url 'public_student_profile' project.student.id %}"
+                               class="gallery-project-image-link"
+                               aria-label="View the portfolio of {{ project.student.full_name|default:project.student.user.username }}">
+
+                                {% if project.project_image %}
+                                    <img
+                                        src="{{ project.project_image.url }}"
+                                        alt="{{ project.title }}"
+                                        class="gallery-project-image"
+                                    >
+                                {% else %}
+                                    <div class="gallery-image-placeholder">
+                                        <span>&lt;/&gt;</span>
+                                        <small>STUDENT PROJECT</small>
+                                    </div>
+                                {% endif %}
+
+                                <span class="gallery-view-overlay">
+                                    View student portfolio ↗
+                                </span>
+                            </a>
+
+                            <div class="gallery-project-content">
+
+                                <div class="gallery-project-meta">
+                                    <span>
+                                        {{ project.student.department|default:"Student Project" }}
+                                    </span>
+                                    <span>
+                                        {{ project.student.level|default:"Level not specified" }}
+                                    </span>
+                                </div>
+
+                                <h3>{{ project.title }}</h3>
+
+                                <p class="gallery-project-description">
+                                    {{ project.description|default:"No description provided."|truncatewords:25 }}
+                                </p>
+
+                                {% if project.technologies %}
+                                    <div class="gallery-technologies">
+                                        <strong>Technologies</strong>
+                                        <p>{{ project.technologies|truncatewords:12 }}</p>
+                                    </div>
+                                {% endif %}
+
+                                <div class="gallery-card-footer">
+                                    <a href="{% url 'public_student_profile' project.student.id %}"
+                                       class="gallery-student-link">
+                                        <span class="gallery-student-avatar">
+                                            {{ project.student.full_name|default:project.student.user.username|first|upper }}
+                                        </span>
+                                        <span>
+                                            <small>CREATED BY</small>
+                                            <strong>
+                                                {{ project.student.full_name|default:project.student.user.username }}
+                                            </strong>
+                                        </span>
+                                    </a>
+                                </div>
+
+                                {% if project.github_link or project.live_demo_link %}
+                                    <div class="gallery-project-links">
+                                        {% if project.github_link %}
+                                            <a href="{{ project.github_link }}"
+                                               target="_blank"
+                                               rel="noopener noreferrer">
+                                                Source Code ↗
+                                            </a>
+                                        {% endif %}
+
+                                        {% if project.live_demo_link %}
+                                            <a href="{{ project.live_demo_link }}"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               class="gallery-demo-link">
+                                                Live Demo ↗
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </article>
+                    {% endfor %}
+
+                </div>
+            {% else %}
+                <div class="gallery-empty-state">
+                    <div class="gallery-empty-icon">⌕</div>
+                    <h3>No matching projects found</h3>
+                    <p>
+                        Try another search term or change your department
+                        and level filters.
+                    </p>
+                    <a href="{% url 'public_showcase' %}"
+                       class="gallery-empty-button">
+                        View all projects
+                    </a>
+                </div>
+            {% endif %}
+
+        </section>
+
+        <!-- Invitation to students -->
+        <section class="gallery-join-banner">
+            <div>
+                <p class="gallery-eyebrow">HAVE A PROJECT TO SHARE?</p>
+                <h2>Your work deserves to be discovered.</h2>
+                <p>Create your portfolio and let others explore what you build.</p>
+            </div>
+            <a href="{% url 'register' %}">Join the showcase ↗</a>
+        </section>
+
+    </main>
+
+    <footer class="gallery-footer">
+        <a href="{% url 'public_showcase' %}" class="gallery-brand">
+            <span class="gallery-brand-icon">S</span>
+            <span>Student Showcase</span>
+        </a>
+        <p>A place for student ideas, skills, and creativity.</p>
+    </footer>
+
+</body>
+</html>

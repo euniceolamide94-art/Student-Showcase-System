@@ -1,0 +1,196 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration Dashboard | Student Showcase</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="admin-dashboard-page">
+
+    <aside class="admin-sidebar">
+        <a href="{% url 'admin_dashboard' %}" class="admin-brand">
+            <span class="admin-brand-icon">S</span>
+            <span>Student Showcase</span>
+        </a>
+
+        <p class="admin-menu-label">MAIN MENU</p>
+
+        <nav class="admin-sidebar-nav">
+            <a href="{% url 'admin_dashboard' %}" class="admin-nav-link active">
+                <span>▦</span> Dashboard
+            </a>
+
+            <a href="{% url 'admin:accounts_studentprofile_changelist' %}"
+               class="admin-nav-link">
+                <span>♙</span> Manage Students
+            </a>
+
+            <a href="{% url 'admin:accounts_project_changelist' %}"
+               class="admin-nav-link">
+                <span>▤</span> Manage Projects
+            </a>
+
+            <a href="{% url 'admin:index' %}" class="admin-nav-link">
+                <span>⚙</span> Django Admin
+            </a>
+        </nav>
+
+        <div class="admin-sidebar-bottom">
+            <a href="{% url 'logout' %}" class="admin-logout-link">
+                <span>↪</span> Log Out
+            </a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+
+        <header class="admin-topbar">
+            <div>
+                <p class="admin-breadcrumb">Administration / Overview</p>
+                <h1>Dashboard</h1>
+            </div>
+
+            <div class="admin-topbar-label">
+                <span class="admin-status-dot"></span>
+                Administrator
+            </div>
+        </header>
+
+        <section class="admin-welcome">
+            <div>
+                <p class="admin-eyebrow">ADMINISTRATION OVERVIEW</p>
+                <h2>Welcome, Administrator!</h2>
+                <p>Manage student profiles and projects from one place.</p>
+            </div>
+
+            <div class="admin-welcome-symbol" aria-hidden="true">✦</div>
+        </section>
+
+        <!-- Dashboard statistics -->
+        <section class="admin-statistics">
+
+            <article class="admin-stat-card">
+                <div class="admin-stat-icon users-icon">♙</div>
+                <p class="admin-stat-label">Registered Users</p>
+                <h2 class="admin-stat-number">
+                    {{ total_users|default:"0" }}
+                </h2>
+                <a href="{% url 'admin:auth_user_changelist' %}">
+                    View users <span>→</span>
+                </a>
+            </article>
+
+            <article class="admin-stat-card">
+                <div class="admin-stat-icon students-icon">♙</div>
+                <p class="admin-stat-label">Total Students</p>
+                <h2 class="admin-stat-number">
+                    {{ total_students|default:"0" }}
+                </h2>
+                <a href="{% url 'admin:accounts_studentprofile_changelist' %}">
+                    View students <span>→</span>
+                </a>
+            </article>
+
+            <article class="admin-stat-card">
+                <div class="admin-stat-icon projects-icon">▤</div>
+                <p class="admin-stat-label">Total Projects</p>
+                <h2 class="admin-stat-number">
+                    {{ total_projects|default:"0" }}
+                </h2>
+                <a href="{% url 'admin:accounts_project_changelist' %}">
+                    View projects <span>→</span>
+                </a>
+            </article>
+
+        </section>
+
+        <!-- Quick actions -->
+        <section class="admin-management-section">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Quick Actions</h2>
+                    <p>Choose an area you want to manage.</p>
+                </div>
+            </div>
+
+            <div class="admin-action-grid">
+
+                <a href="{% url 'admin:accounts_studentprofile_changelist' %}"
+                   class="admin-action-card">
+                    <span class="admin-action-icon">♙</span>
+                    <span class="admin-action-text">
+                        <strong>Manage Students</strong>
+                        <small>View and manage student profiles.</small>
+                    </span>
+                    <span class="admin-action-arrow">→</span>
+                </a>
+
+                <a href="{% url 'admin:accounts_project_changelist' %}"
+                   class="admin-action-card">
+                    <span class="admin-action-icon">▤</span>
+                    <span class="admin-action-text">
+                        <strong>Manage Projects</strong>
+                        <small>Review student project records.</small>
+                    </span>
+                    <span class="admin-action-arrow">→</span>
+                </a>
+
+                <a href="{% url 'admin:index' %}" class="admin-action-card">
+                    <span class="admin-action-icon">⚙</span>
+                    <span class="admin-action-text">
+                        <strong>Django Admin</strong>
+                        <small>Open the full administration site.</small>
+                    </span>
+                    <span class="admin-action-arrow">→</span>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Recent student projects -->
+        <section class="admin-recent-projects">
+            <div class="admin-section-heading">
+                <div>
+                    <h2>Recent Student Projects</h2>
+                    <p>The five most recently added projects.</p>
+                </div>
+
+                <a href="{% url 'admin:accounts_project_changelist' %}">
+                    View all projects →
+                </a>
+            </div>
+
+            {% for project in recent_projects %}
+                <article class="admin-recent-project">
+                    <div>
+                        <h3>{{ project.title }}</h3>
+                        <p>{{ project.student.full_name }}</p>
+                        <p class="admin-recent-technologies">
+                            {{ project.technologies }}
+                        </p>
+                    </div>
+
+                    <a href="{% url 'admin:accounts_project_change' project.id %}">
+                        Review
+                    </a>
+                </article>
+            {% empty %}
+                <p class="admin-recent-empty">
+                    No student projects have been added yet.
+                </p>
+            {% endfor %}
+        </section>
+
+        <footer class="admin-dashboard-footer">
+            Student Portfolio and Student Showcase System
+        </footer>
+
+    </main>
+
+</body>
+</html>
+

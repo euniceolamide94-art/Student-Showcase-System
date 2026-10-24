@@ -1,0 +1,71 @@
+
+{% extends "admin/index.html" %}
+{% load admin_stats %}
+
+{% block content %}
+<style>
+
+    .statistics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 22px;
+        margin: 0 0 30px;
+    }
+
+    .stat-card {
+        padding: 26px;
+        border-radius: 12px;
+        background: var(--body-bg, #ffffff);
+        border: 1px solid var(--hairline-color, #e2e8f0);
+        border-left: 5px solid #2563eb;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
+    }
+
+    .stat-card h3 {
+        margin: 0 0 14px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--body-quiet-color, #64748b);
+    }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2563eb;
+        margin: 0;
+    }
+
+    @media (max-width: 600px) {
+        .statistics-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+
+<div class="statistics-grid">
+    <div class="stat-card">
+        <h3>Registered Users</h3>
+        <p class="stat-number">{% total_users %}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Student Profiles</h3>
+        <p class="stat-number">{% total_students %}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Student Projects</h3>
+        <p class="stat-number">{% total_projects %}</p>
+    </div>
+</div>
+
+{{ block.super }}
+{% endblock %}

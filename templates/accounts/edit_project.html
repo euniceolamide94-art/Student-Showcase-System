@@ -1,0 +1,100 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Project | Student Showcase</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="edit-project-page">
+
+    <nav class="navbar">
+        <div class="logo">Student Showcase</div>
+
+        <div class="nav-links">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'edit_profile' %}">Edit Profile</a>
+            <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+        </div>
+    </nav>
+
+    <main class="edit-project-container">
+
+        <a href="{% url 'dashboard' %}" class="edit-project-back">
+            &larr; Back to Dashboard
+        </a>
+
+        <section class="edit-project-card">
+
+            <div class="edit-project-heading">
+                <p class="section-label">MY PORTFOLIO</p>
+                <h1>Edit Project</h1>
+                <p>Update your project details and keep your portfolio up to date.</p>
+            </div>
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  class="edit-project-form">
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="edit-project-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="edit-project-field">
+
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span class="required-mark">*</span>
+                            {% endif %}
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <small class="edit-project-help">
+                                {{ field.help_text }}
+                            </small>
+                        {% endif %}
+
+                        {% if field.errors %}
+                            <div class="edit-project-field-error">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
+
+                <div class="edit-project-actions">
+                    <button type="submit" class="primary-button">
+                        Save Changes
+                    </button>
+
+                    <a href="{% url 'dashboard' %}"
+                       class="secondary-button">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+        <p class="edit-project-footer">
+            Keep your student portfolio accurate and up to date.
+        </p>
+
+    </main>
+
+</body>
+</html>

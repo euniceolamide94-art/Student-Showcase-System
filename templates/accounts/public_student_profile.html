@@ -1,0 +1,156 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ student.full_name|default:student.user.username }} | Student Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Student Showcase</div>
+
+        <div class="nav-links">
+            <a href="{% url 'public_showcase' %}">Explore Projects</a>
+            <a href="{% url 'login' %}">Student Login</a>
+        </div>
+    </nav>
+
+    <main class="public-profile-container">
+
+        <a class="public-profile-back"
+           href="{% url 'public_showcase' %}">
+            ← Back to Public Showcase
+        </a>
+
+        <section class="public-profile-card">
+
+            <div class="public-profile-header">
+                {% if student.profile_picture %}
+                    <img
+                        src="{{ student.profile_picture.url }}"
+                        alt="Profile picture of {{ student.full_name|default:student.user.username }}"
+                        class="public-profile-picture"
+                    >
+                {% else %}
+                    <div class="public-profile-placeholder">
+                        {{ student.full_name|default:student.user.username|first|upper }}
+                    </div>
+                {% endif %}
+
+                <div>
+                    <h1>{{ student.full_name|default:student.user.username }}</h1>
+                    <p class="public-profile-subtitle">
+                        Student Portfolio
+                    </p>
+                </div>
+            </div>
+
+            <div class="public-profile-details">
+                <div class="public-profile-detail">
+                    <strong>Department</strong>
+                    {{ student.department|default:"Not specified" }}
+                </div>
+
+                <div class="public-profile-detail">
+                    <strong>Level</strong>
+                    {{ student.level|default:"Not specified" }}
+                </div>
+
+                <div class="public-profile-detail">
+                    <strong>Skills</strong>
+                    {{ student.skills|default:"Not specified" }}
+                </div>
+            </div>
+
+            <div class="public-profile-bio">
+                <h2>About Me</h2>
+                <p>{{ student.bio|default:"This student has not added a bio yet." }}</p>
+            </div>
+
+            <div class="public-profile-social">
+                {% if student.github_link %}
+                    <a href="{{ student.github_link }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        GitHub ↗
+                    </a>
+                {% endif %}
+
+                {% if student.linkedin_link %}
+                    <a href="{{ student.linkedin_link }}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        LinkedIn ↗
+                    </a>
+                {% endif %}
+            </div>
+
+        </section>
+
+        <section class="public-profile-projects">
+            <p class="section-label">STUDENT WORK</p>
+            <h2>Projects by {{ student.full_name|default:student.user.username }}</h2>
+
+            {% if projects %}
+                <div class="projects-grid">
+                    {% for project in projects %}
+                        <article class="project-card">
+
+                            {% if project.project_image %}
+                                <img
+                                    src="{{ project.project_image.url }}"
+                                    alt="{{ project.title }}"
+                                    class="project-image"
+                                >
+                            {% endif %}
+
+                            <div class="project-content">
+                                <h3>{{ project.title }}</h3>
+
+                                <p>
+                                    {{ project.description|default:"No description provided." }}
+                                </p>
+
+                                <p>
+                                    <strong>Technologies:</strong>
+                                    {{ project.technologies|default:"Not specified" }}
+                                </p>
+
+                                <div class="project-links">
+                                    {% if project.github_link %}
+                                        <a href="{{ project.github_link }}"
+                                           target="_blank"
+                                           rel="noopener noreferrer">
+                                            View Source Code ↗
+                                        </a>
+                                    {% endif %}
+
+                                    {% if project.live_demo_link %}
+                                        <a href="{{ project.live_demo_link }}"
+                                           target="_blank"
+                                           rel="noopener noreferrer">
+                                            Live Demo ↗
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-projects">
+                    <h3>No projects yet</h3>
+                    <p>This student has not added any projects yet.</p>
+                </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+</body>
+</html>
